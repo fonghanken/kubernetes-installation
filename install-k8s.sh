@@ -2,7 +2,7 @@ docker run -it --rm --privileged roboxes/rhel8:latest bash
 docker run -it --rm --privileged roboxes/centos8:latest bash
 
 
-export VERSION=1.24
+VERSION=1.24
 curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo
 curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/CentOS_8/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
 
@@ -20,18 +20,11 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
 exclude=kubelet kubeadm kubectl
 EOF
 
-export CRIO_DIR=~/packages/cri-o
+CRIO_DIR=~/packages/cri-o
 mkdir -p $CRIO_DIR
 dnf install cri-o --downloadonly --downloaddir $CRIO_DIR
 
-export KUBECTL_DIR=~/packages/kubectl
-mkdir -p $KUBECTL_DIR
-dnf install kubectl-$VERSION* --downloadonly --disableexcludes=kubernetes --downloaddir $KUBECTL_DIR
-
-export KUBEADM_DR=~/packages/kubeadm
-mkdir -p $KUBEADM_DR
-dnf install kubeadm-$VERSION* --downloadonly --disableexcludes=kubernetes --downloaddir $KUBEADM_DR
-
-export KUBELET_DIR=~/packages/kubelet
-mkdir -p $KUBELET_DIR
-dnf install kubelet-$VERSION* --downloadonly --disableexcludes=kubernetes --downloaddir $KUBELET_DIR
+K8S_VER=1.24.2
+K8S_DIR=~/packages/kubernetes
+mkdir -p $K8S_DIR
+dnf install kubeadm-$K8S_VER kubectl-$K8S_VER kubelet-$K8S_VER cri-tools-$K8S_VER --downloadonly --disableexcludes=kubernetes --downloaddir $K8S_DIR
